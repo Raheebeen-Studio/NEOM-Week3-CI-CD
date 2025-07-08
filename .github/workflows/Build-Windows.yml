@@ -12,6 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      #Tree files
+      - name: List File Structure 1
+        run: tree
+
       #cache
       - name: Cache library 
         uses: actions/cache@v3
@@ -44,6 +48,10 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: StandaloneWindows64
+
+      #Tree files
+      - name: List File Structure 2
+        run: tree
 
       #Output
       - name: Output
