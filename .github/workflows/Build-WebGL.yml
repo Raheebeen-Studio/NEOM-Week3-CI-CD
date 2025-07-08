@@ -29,6 +29,10 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
+      #Diff
+      - name: Check Changes
+        run: git status --verbose --verbose
+
       #Build
       - name: Build project
         uses: game-ci/unity-builder@v4
