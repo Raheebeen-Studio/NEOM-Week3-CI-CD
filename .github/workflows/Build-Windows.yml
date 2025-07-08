@@ -1,0 +1,53 @@
+name: Build-Windows
+on : [workflow_dispatch]
+
+jobs:
+  Build:
+    name: Build my project
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+    steps:
+      #checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      #cache
+      - name: Cache library 
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      #Test
+      - name: Run tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      #Diff
+      - name: Check Changes
+        run: git status --verbose --verbose
+
+      #Build
+      - name: Build project
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneWindows64
+
+      #Output
+      - name: Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build
+          path: Build
