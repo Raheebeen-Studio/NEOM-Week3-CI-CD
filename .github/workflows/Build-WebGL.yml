@@ -10,13 +10,16 @@ jobs:
     steps:
 
       #Cleanup Disk Space
-      - name: Maximize build space
-        uses: easimon/maximize-build-space@master
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@main
         with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-          remove-android: true
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
 
       #Checkout
       - name: Checkout repository
