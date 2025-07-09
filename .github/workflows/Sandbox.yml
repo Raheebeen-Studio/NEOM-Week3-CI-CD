@@ -1,0 +1,35 @@
+name: Sandbox
+on : [workflow_dispatch]
+
+jobs:
+  Build:
+    name: Sandbox
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+    steps:
+      #checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      #cache
+      - name: Cache library 
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      - name: List Space 
+        run: df -h
+
+      - name: Cleanup
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo docker builder prune -a
+
+      - name: List Space 
+        run: df -h
+       
