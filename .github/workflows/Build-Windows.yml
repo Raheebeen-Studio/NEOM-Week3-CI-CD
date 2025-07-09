@@ -8,15 +8,21 @@ jobs:
     permissions:
       checks: write
     steps:
-      #checkout
+      
+      #Cleanup Disk Space
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-android: true
+
+      #Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      #Tree files
-      - name: List File Structure 1
-        run: tree
-
-      #cache
+      #Cache Library
       - name: Cache library 
         uses: actions/cache@v3
         with:
@@ -25,7 +31,11 @@ jobs:
           restore-keys: |
             Library-
 
-      #Test
+      #List Space
+      - name: List Space 
+        run: df -h
+
+      #Run Test
       - name: Run tests
         uses: game-ci/unity-test-runner@v4
         env:
@@ -35,11 +45,15 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-      #Diff
+      #List Space
+      - name: List Space 
+        run: df -h
+
+      #Diff Repo
       - name: Check Changes
         run: git status --verbose --verbose
 
-      #Build
+      #Make Build 
       - name: Build project
         uses: game-ci/unity-builder@v4
         env:
@@ -49,13 +63,17 @@ jobs:
         with:
           targetPlatform: StandaloneWindows64
 
-      #Tree files
-      - name: List File Structure 2
-        run: tree
+      #List Space
+      - name: List Space 
+        run: df -h
 
-      #Output
+      #List File Structure
+      - name: List File Structure
+        run: tree -I 'Assets|Library|Logs|obj|Temp'
+
+      #Publish Output
       - name: Output
         uses: actions/upload-artifact@v4
         with:
-          name: Build
+          name: build
           path: Build
