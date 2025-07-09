@@ -17,7 +17,7 @@ jobs:
           android: true
           dotnet: true
           haskell: true
-          large-packages: true
+          large-packages: false #too much time
           docker-images: true
           swap-storage: true
 
@@ -72,11 +72,11 @@ jobs:
 
       #List File Structure
       - name: List File Structure
-        run: tree -I 'Assets|Library|Logs|obj|Temp'
+        run: tree -d -I 'Assets|Library|Logs|obj|Temp'
 
       #Publish Output
       - name: Output
         uses: actions/upload-artifact@v4
         with:
           name: build
-          path: Build
+          path: build
