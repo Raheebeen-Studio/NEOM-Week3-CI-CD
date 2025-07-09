@@ -8,11 +8,28 @@ jobs:
     permissions:
       checks: write
     steps:
-      #checkout
+
+      #List Space
+      - name: List Space 
+        run: df -h
+
+      #Cleanup Disk Space
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+
+      #List Space
+      - name: List Space 
+        run: df -h
+
+      #Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      #cache
+      #Cache
       - name: Cache library 
         uses: actions/cache@v3
         with:
@@ -20,16 +37,8 @@ jobs:
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
           restore-keys: |
             Library-
-
-      - name: List Space 
-        run: df -h
-
-      - name: Cleanup
-        run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
-          sudo docker image prune --all --force
-          sudo docker builder prune -a
-
+              
+      #List Space
       - name: List Space 
         run: df -h
        
