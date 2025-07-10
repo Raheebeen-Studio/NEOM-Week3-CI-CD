@@ -1,9 +1,11 @@
 ## Workflow:
-- All development will occur in the **dev** branch.
-- Changes in the **dev** branch will be moved to the **main** branch through a pull request.
-- Pull requests will be created by the tech lead after feature completion.
+- All development will occur in the **feature** branches.
+- **Feature** branches are to be created to facilitate small feature additions for each branch.
+- Changes in the **feature** branches will be moved to the **main** branch through a pull request.
 - The CI/CD pipeline will automatically detect pull requests to **main** and run the test/build workflows.
 - The game can be tested from these pull requests, and should the test/build pass, then the pull request can be merged into **main**.
+- After the pull request is merged; a new **feature** will be created from main to develop the next feature.
+- When enough features are implemented a relase tag will be used to signify a release.
 
 ## Setup:
 A standard Unity project, no special setup needed so far.
